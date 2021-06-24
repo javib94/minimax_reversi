@@ -9,9 +9,9 @@ app.get('/', (req, res) => {
   var turno = req.query.turno
   var estado = req.query.estado
   if(turno!= undefined && estado!=undefined){
-    res.end('20')
+    res.send('20')
   }else{
-      res.end('20')
+      res.send('20')
   }
 })
 
