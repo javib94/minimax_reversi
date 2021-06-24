@@ -1,7 +1,7 @@
 
 const express = require('express')
 const app = express()
-const port = 3000
+const port = process.env.PORT||3000 
 
 app.get('/', (req, res) => {
   console.log(req.query.turno)
@@ -9,9 +9,9 @@ app.get('/', (req, res) => {
   var turno = req.query.turno
   var estado = req.query.estado
   if(turno!= undefined && estado!=undefined){
-    res.send('20')
+    res.end('20')
   }else{
-      res.send('20')
+      res.end('20')
   }
 })
 
