@@ -54,7 +54,6 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
     //una vez generados los hijos mandarlos a generar sus hijos
     //console.log(estadoshijos)
     var mejorheuristic = 0
-    var mejormov = []
     var flag = true
     var nextTurn = turno=='0'? '1' : '0'
     for(hijo of estadoshijos){
@@ -62,22 +61,20 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
       hijo[2] = result[2] //Le coloco la heuristica resultante 
       if(flag){
         mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
-        mejormov = hijo[1]
         flag = !flag
       }
       if(maximizando){
         if(hijo[2]>mejorheuristic){
           mejorheuristic = hijo[2];
-          mejormov = hijo[1];
         }
       }else{//minimizando
         if(hijo[2]<mejorheuristic){
           mejorheuristic = hijo[2];
-          mejormov = hijo[1];
+      
         }
       }
     }
-    return [mejormov[0], mejormov[1], mejorheuristic];
+    return [movimiento[0], movimiento[1], mejorheuristic];
   }
 }
 
