@@ -10,25 +10,82 @@ app.get('/', (req, res) => {
   var estado = req.query.estado
   var matrix = toMatrix(estado.toString());
   //arreglo con los movimientos posibles a realizar. 
-  minimax(turno, matrix, true, 1, 2)
+  var movimiento = minimax(turno, matrix, true, 0, 2)
   //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
-  
-  res.send('24');
+  var response = movimiento[0]+""+movimiento[1]
+  console.log(response)
+  res.send(response)
 })
 
-function minimax(turno, estado, maximizando, profundidad,  maxprof){ 
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
+
+
+function minimax(turno, estado, maximizando, profundidad,  maxprof){ //debo retornar [fila,columna,heuristica]
   if(profundidad==maxprof){
     return;
-  }
+  }       
   var movimientosposibles = getMovimientosPosibles(turno, estado); // elementos [fila, columna, piezascomibles]  
+  
   var estadoshijos = [];
-  for(i in movimientosposibles){
-    var nuevoestado = ejecutarEstado(turno, estado, movimientosposibles[i]);
-    estadoshijos.push(nuevoestado);
+  for(mov of movimientosposibles){
+    var nuevoestado = ejecutarEstado(turno, estado, mov);
+    estadoshijos.push([nuevoestado, mov, 0]); // cada hijo guarda [nuevoestado | movimiento que ejecuta 1 | heuristica(no calculada)]
   }
-  // console.log("actual:", estado)
-  // console.log("---")
-  // console.log("hijos:", estadoshijos)
+  if(profundidad==maxprof-1){ //si mis hijos son nodos hoja 
+    var mejorheuristic = estadoshijos[0][1][2];
+    var mejormov = estadoshijos[0][1]
+    var flag = true;
+    for(hijo of estadoshijos){
+      //HEURISTICA AQUI
+      hijo[2] = hijo[1][2]; //Heuristica igual a la cantidad de fichas a comer. 
+      //MODIFICAR AQUI
+      if(flag){
+        mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
+        flag = !flag
+      }
+      if(maximizando){
+        if(hijo[2]>mejorheuristic){
+          mejorheuristic = hijo[2];
+          mejormov = hijo[1];
+        }
+      }else{//minimizando
+        if(hijo[2]<mejorheuristic){
+          mejorheuristic = hijo[2];
+          mejormov = hijo[1];
+        }
+      }
+    }
+    return [mejormov[0], mejormov[1], mejorheuristic];
+  }else{
+    //una vez generados los hijos mandarlos a generar sus hijos
+    //console.log(estadoshijos)
+    var mejorheuristic = estadoshijos[0][1][2];
+    var mejormov = estadoshijos[0][1]
+    var flag = true;
+    var nextTurn = turno=='0'? '1' : '0'
+    for(hijo of estadoshijos){
+      var result = minimax(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof)
+      hijo[2] = result[2] //Le coloco la heuristica resultante 
+      if(flag){
+        mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
+        flag = !flag
+      }
+      if(maximizando){
+        if(hijo[2]>mejorheuristic){
+          mejorheuristic = hijo[2];
+          mejormov = hijo[1];
+        }
+      }else{//minimizando
+        if(hijo[2]<mejorheuristic){
+          mejorheuristic = hijo[2];
+          mejormov = hijo[1];
+        }
+      }
+    }
+    return [mejormov[0], mejormov[1], mejorheuristic];
+  }
 }
 
 function ejecutarEstado(turno, estado, movimiento){
@@ -39,7 +96,7 @@ function ejecutarEstado(turno, estado, movimiento){
       if(movimiento[0]==i&&movimiento[1]==j){
         nuevoestado[i] += turno
       }else{
-        console.log(nuevoestado[i]);
+        //console.log(nuevoestado[i]);
         nuevoestado[i] += estado[i][j] 
       }
     }
@@ -47,17 +104,12 @@ function ejecutarEstado(turno, estado, movimiento){
   return nuevoestado
 }
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
-
 
 
 function getMovimientosPosibles(turno, estado){
-  //por default juega con fichas blancas = 0 el oponente = 1;
   var movimientos = [];
   for(i=0;i<8;i++){
-    for(j=0;j<8;j++){
+    for(j=0;j<8;j++){//revisa en todas las posiciones si hay movimiento posible 
       var comida = isLegalMove(estado, turno, i,j); // retorna cuantas puede comer
       if(comida>0){
         movimientos.push([i,j,comida]);
@@ -69,7 +121,7 @@ function getMovimientosPosibles(turno, estado){
 
 function isLegalMove(estado, turno, fila, columna){
   if(estado[fila][columna]!='2'){
-    return 0;
+    return 0; //si está ocupada ni hay que revisar
   }
   return  puedeComer(estado, turno, fila, columna)
 }
