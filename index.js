@@ -8,13 +8,17 @@ app.get('/', (req, res) => {
   console.log(req.query.estado)
   var turno = req.query.turno
   var estado = req.query.estado
-  var matrix = toMatrix(estado.toString());
-  //arreglo con los movimientos posibles a realizar. 
-  var movimiento = minimax(turno, matrix, true, 0, 2)
-  //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
-  var response = movimiento[0]+""+movimiento[1]
-  console.log(response)
-  res.send(response)
+  if(turno!=undefined&&estado!=undefined){
+    var matrix = toMatrix(estado.toString());
+    //arreglo con los movimientos posibles a realizar. 
+    var movimiento = minimax(turno, matrix, true, 0, 2)
+    //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
+    var response = movimiento[0]+""+movimiento[1]
+    console.log(response)
+    res.send(response)
+  }else{
+    res.send('24')
+  }  
 })
 
 app.listen(port, () => {
