@@ -81,11 +81,7 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
         }
       }
     }
-    if(movimiento==null){
-      return [mejormov[0], mejormov[1], mejorheuristic]
-    }else{
-      return [movimiento[0], movimiento[1], mejorheuristic]
-    }
+    return [mejormov[0], mejormov[1], mejorheuristic]    
   }
 }
 
