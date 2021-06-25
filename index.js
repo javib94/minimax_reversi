@@ -20,10 +20,10 @@ app.get('/', (req, res) => {
   if(turno!=undefined&&estado!=undefined){
     var matrix = toMatrix(estado.toString());
     //arreglo con los movimientos posibles a realizar. 
-    var movimiento = minimax(turno, matrix, true, 0, 2, null)
+    var movimiento = minimax2(turno, matrix, true, 0, 2, null)
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
-    
+
     console.log(movimiento)
     res.send(response)
   }else{
@@ -83,6 +83,60 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
       }
     }
     return [mejormov[0], mejormov[1], mejorheuristic]    
+  }
+}
+
+
+
+function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento){
+  if(profundidad == maxprof){
+    return [movimiento[0], movimiento[1], movimiento[2]*1]
+    //         fila           columna      HEURISTICA                            
+  }
+  var movimientosposibles = getMovimientosPosibles(turno, estado); // elementos [fila, columna, piezascomibles]  
+  var estadoshijos = [];
+  for(mov of movimientosposibles){
+    var nuevoestado = ejecutarEstado(turno, estado, mov);
+    estadoshijos.push([nuevoestado, mov, 0]); // cada hijo guarda [nuevoestado | movimiento que ejecuta 1 | heuristica(no calculada)]
+                    //     estado  movimiento    heristica sin definir
+  }
+  if(estadoshijos.length==0){
+    return [movimiento[0], movimiento[1], movimiento[2]*1]
+    //         fila           columna      HEURISTICA
+  }
+  var mejorheuristica;
+  var mejormov;
+  for(hijo of estadoshijos){
+    let nextTurn = '';
+    if(turno === '0'){
+      nextTurn = '1'  
+    } else {
+      nextTurn = '0'  
+    }
+    var result = minimax2(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
+    hijo[2] = result[2];
+    if(mejorheuristica == undefined){
+      mejorheuristica = hijo[2]
+      mejorhijo = hijo
+    }else{
+      if(maximizando){
+        if(hijo[2]>mejorheuristica){
+          mejorheuristica = hijo[2]
+          mejorhijo = hijo
+        }
+      }else{
+        if(hijo[2]<mejorheuristica){
+          mejorheuristica = hijo[2]
+          mejorhijo = hijo
+        }
+      }
+    }
+  }
+  if(movimiento!=null){
+    movimiento[2] = mejorheuristica;
+    return movimiento;
+  }else{
+    return mejorhijo;
   }
 }
 
