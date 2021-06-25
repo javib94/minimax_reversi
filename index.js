@@ -46,6 +46,7 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
   for(mov of movimientosposibles){
     var nuevoestado = ejecutarEstado(turno, estado, mov);
     estadoshijos.push([nuevoestado, mov, 0]); // cada hijo guarda [nuevoestado | movimiento que ejecuta 1 | heuristica(no calculada)]
+                    //      0        1   2
   }
   if(estadoshijos.length==0){
     // CALCULAR HEURISTICA 
@@ -58,8 +59,10 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
     var flag = true
     var nextTurn = turno=='0'? '1' : '0'
     for(hijo of estadoshijos){
+     
       var result = minimax(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
       hijo[2] = result[2] //Le coloco la heuristica resultante 
+      console.log(hijo);
       if(flag){
         mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
         mejormov = hijo[1]
@@ -69,6 +72,7 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
         if(hijo[2]>mejorheuristic){
           mejorheuristic = hijo[2];
           mejormov = hijo[1];
+
         }
       }else{//minimizando
         if(hijo[2]<mejorheuristic){
