@@ -20,9 +20,10 @@ app.get('/', (req, res) => {
   if(turno!=undefined&&estado!=undefined){
     var matrix = toMatrix(estado.toString());
     //arreglo con los movimientos posibles a realizar. 
-    var movimiento = minimax(turno, matrix, true, 0, 3, null)
+    var movimiento = minimax(turno, matrix, true, 0, 2, null)
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
+    
     console.log(movimiento)
     res.send(response)
   }else{
