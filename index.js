@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     var movimiento = minimax(turno, matrix, true, 0, 2)
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
-    console.log(response)
+    console.log(movimiento)
     res.send(response)
   }else{
     res.send('24')
