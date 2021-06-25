@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
 
-    console.log(movimiento)
+    console.log(response)
     res.send(response)
   }else{
     res.send('24')
@@ -63,7 +63,7 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
      
       var result = minimax(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
       hijo[2] = result[2] //Le coloco la heuristica resultante 
-      console.log(hijo);
+      //console.log(hijo);
       if(flag){
         mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
         mejormov = hijo[1]
