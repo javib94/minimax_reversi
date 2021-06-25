@@ -2,7 +2,16 @@
 const express = require('express')
 const app = express()
 const port = process.env.PORT||3000 
-
+var matrizheuristica= [
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+  [],
+]
 app.get('/', (req, res) => {
   console.log(req.query.turno)
   console.log(req.query.estado)
@@ -11,7 +20,7 @@ app.get('/', (req, res) => {
   if(turno!=undefined&&estado!=undefined){
     var matrix = toMatrix(estado.toString());
     //arreglo con los movimientos posibles a realizar. 
-    var movimiento = minimax(turno, matrix, true, 0, 6)
+    var movimiento = minimax(turno, matrix, true, 0, 3, null)
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
     console.log(movimiento)
@@ -25,10 +34,11 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-
-function minimax(turno, estado, maximizando, profundidad,  maxprof){ //debo retornar [fila,columna,heuristica]
+// recibe el turno, estado, boolean, prof actual, max prof, movimiento que genero el estado actual
+function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){ //debo retornar [fila,columna,heuristica]
   if(profundidad==maxprof){
-    return;
+    // CALCULAR HEURISTICA 
+    return [movimiento[0], movimiento[1], movimiento[2]]; //si ya no hay sucesores 
   }       
   var movimientosposibles = getMovimientosPosibles(turno, estado); // elementos [fila, columna, piezascomibles]  
   
@@ -37,43 +47,22 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof){ //debo reto
     var nuevoestado = ejecutarEstado(turno, estado, mov);
     estadoshijos.push([nuevoestado, mov, 0]); // cada hijo guarda [nuevoestado | movimiento que ejecuta 1 | heuristica(no calculada)]
   }
-  if(profundidad==maxprof-1){ //si mis hijos son nodos hoja 
-    var mejorheuristic = estadoshijos[0][1][2];
-    var mejormov = estadoshijos[0][1]
-    var flag = true;
-    for(hijo of estadoshijos){
-      //HEURISTICA AQUI
-      hijo[2] = hijo[1][2]; //Heuristica igual a la cantidad de fichas a comer. 
-      //MODIFICAR AQUI
-      if(flag){
-        mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
-        flag = !flag
-      }
-      if(maximizando){
-        if(hijo[2]>mejorheuristic){
-          mejorheuristic = hijo[2];
-          mejormov = hijo[1];
-        }
-      }else{//minimizando
-        if(hijo[2]<mejorheuristic){
-          mejorheuristic = hijo[2];
-          mejormov = hijo[1];
-        }
-      }
-    }
-    return [mejormov[0], mejormov[1], mejorheuristic];
+  if(estadoshijos.length==0){
+    // CALCULAR HEURISTICA 
+    return [movimiento[0], movimiento[1], movimiento[2]]; //si ya no hay sucesores 
   }else{
     //una vez generados los hijos mandarlos a generar sus hijos
     //console.log(estadoshijos)
-    var mejorheuristic = estadoshijos[0][1][2];
-    var mejormov = estadoshijos[0][1]
-    var flag = true;
+    var mejorheuristic = 0
+    var mejormov = []
+    var flag = true
     var nextTurn = turno=='0'? '1' : '0'
     for(hijo of estadoshijos){
-      var result = minimax(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof)
+      var result = minimax(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
       hijo[2] = result[2] //Le coloco la heuristica resultante 
       if(flag){
         mejorheuristic = hijo[2] //solo la primera vez que entra al ciclo para empezar a comparar 
+        mejormov = hijo[1]
         flag = !flag
       }
       if(maximizando){
