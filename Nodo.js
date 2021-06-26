@@ -149,7 +149,6 @@ class Nodo{
         let X1 = [-1, -1, 0, 1, 1, 1, 0, -1];
         let Y1 = [0, 1, 1, 1, 0, -1, -1, -1];
         let V = [
-
         [20, -3, 11, 8, 8, 11, -3, 20],
         [-3, -7, -4, 1, 1, -4, -7, -3],
         [11, -4, 2, 2, 2, 2, -4, 11],
@@ -162,7 +161,7 @@ class Nodo{
     
     
     // Piece difference, frontier disks and disk squares
-        for(let i=0; i<8; i++)
+        for(let i=0; i<8; i++){
             for(let j=0; j<8; j++)  {
                 if(grid[i][j] == my_color)  {
                     d += V[i][j];
@@ -175,13 +174,15 @@ class Nodo{
                     for(k=0; k<8; k++)  {
                         x = i + X1[k]; y = j + Y1[k];
                         if(x >= 0 && x < 8 && y >= 0 && y < 8 && grid[x][y] == '2') {
-                            if(grid[i][j] == my_color)  my_front_tiles++;
+                            if(grid[i][j] == my_color) 
+                             my_front_tiles++;
                             else opp_front_tiles++;
                             break;
                         }
                     }
                 }
             }
+        }
         if(my_tiles > opp_tiles)
             p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
         else if(my_tiles < opp_tiles)

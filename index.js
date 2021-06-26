@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     //console.log("response:", response)
     let mejormov = ia.ejecutar()
     var response = mejormov.fila+""+mejormov.columna
-    res.send(response)
+    res.send(ia.root)
   }else{
     res.send('24')
   }  
