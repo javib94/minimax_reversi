@@ -3,7 +3,7 @@ const Movimiento = require("./Movimiento.js")
 
 class Nodo{
     constructor(turno, estado, deph, maximizar){
-        console.log(estado)
+     //   console.log(estado)
         this.turno = turno
         this.oponente = turno=='1'?'0':'1'
         this.estado = estado
