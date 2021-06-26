@@ -187,7 +187,7 @@ class Nodo{
                 }
             }
         }
-        
+        return d;
         if(my_tiles > opp_tiles){
             p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
         }else if(my_tiles < opp_tiles){
