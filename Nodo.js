@@ -26,7 +26,7 @@ class Nodo{
                 if(this.maximizar&&hijo.heuristica>this.heuristica){
                     this.heuristica = hijo.heuristica
                 }
-                if(!this.maximizar&&hijo.heuristica<this.heuristica){
+                if((!this.maximizar)&&hijo.heuristica<this.heuristica){
                     this.heuristica = hijo.heuristica
                 }
             }
@@ -187,7 +187,6 @@ class Nodo{
                 }
             }
         }
-        return d;
         if(my_tiles > opp_tiles){
             p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
         }else if(my_tiles < opp_tiles){
