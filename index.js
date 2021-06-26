@@ -136,7 +136,7 @@ function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento)
     movimiento[2] = mejorheuristica;
     return movimiento;
   }else{
-    return mejorhijo[2];
+    return mejorhijo[1];
   }
 }
 
