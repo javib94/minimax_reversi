@@ -1,30 +1,24 @@
 
 const express = require('express')
+const  Minimax  = require('./Minimax.js')
 const app = express()
 const port = process.env.PORT||3000 
-var matrizheuristica= [
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-  [],
-]
+
 app.get('/', (req, res) => {
   console.log(req.query.turno)
   console.log(req.query.estado)
   var turno = req.query.turno
   var estado = req.query.estado
   if(turno!=undefined&&estado!=undefined){
-    var matrix = toMatrix(estado.toString());
+    let matrix = toMatrix(estado.toString());
     //arreglo con los movimientos posibles a realizar. 
-    var movimiento = minimax2(turno, matrix, true, 0, 2, null)
+    let ia = new Minimax(turno, matrix, 2);
+    //let movimiento = minimax2(turno, matrix, true, 0, 2, null)
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
-    var response = movimiento[0]+""+movimiento[1]
-
-    console.log("response:", response)
+    //console.log("movimiento:", movimiento)
+    //console.log("response:", response)
+    let mejormov = ia.ejecutar()
+    var response = mejormov.fila+""+mejormov.columna
     res.send(response)
   }else{
     res.send('24')
@@ -89,14 +83,15 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
 
 
 function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento){
+  
   if(profundidad == maxprof){
     return [movimiento[0], movimiento[1], movimiento[2]*1]
     //         fila           columna      HEURISTICA                            
   }
-  var movimientosposibles = getMovimientosPosibles(turno, estado); // elementos [fila, columna, piezascomibles]  
-  var estadoshijos = [];
+  let movimientosposibles = getMovimientosPosibles(turno, estado); // elementos [fila, columna, piezascomibles]  
+  let estadoshijos = [];
   for(mov of movimientosposibles){
-    var nuevoestado = ejecutarEstado(turno, estado, mov);
+    let nuevoestado = ejecutarEstado(turno, estado, mov);
     estadoshijos.push([nuevoestado, mov, 0]); // cada hijo guarda [nuevoestado | movimiento que ejecuta 1 | heuristica(no calculada)]
                     //     estado  movimiento    heristica sin definir
   }
@@ -104,20 +99,22 @@ function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento)
     return [movimiento[0], movimiento[1], movimiento[2]*1]
     //         fila           columna      HEURISTICA
   }
-  var mejorheuristica;
-  var nextTurn = '';
-  var mejorhijo;
-  if(turno === '0'){
+  let mejorheuristica;
+  let nextTurn = '';
+  let mejorhijo;
+  if(turno == '0'){
     nextTurn = '1'  
   } else {
     nextTurn = '0'  
   }
+  let flag = true;
   for(hijo of estadoshijos){
-    var result = minimax2(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
+    let result = minimax2(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
     hijo[2] = result[2];
-    if(mejorheuristica == undefined){
+    if(flag){
       mejorheuristica = hijo[2]
       mejorhijo = hijo
+      flag = !flag;
     }else{
       if(maximizando){
         if(hijo[2]>mejorheuristica){
@@ -132,6 +129,7 @@ function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento)
       }
     }
   }
+  
   if(movimiento!=null){
     movimiento[2] = mejorheuristica;
     return movimiento;
@@ -347,10 +345,15 @@ function puedeComer(estado, turno, fila, columna){
 }
 
 function toMatrix(arreglo){
-  var size = 8;
-  var res = []; 
-  for(var i=0;i < arreglo.length; i = i+size)
-  res.push(arreglo.slice(i,i+size));
+  let res = []
+  let n = 0;
+  for(i=0;i<8;i++){
+    res.push([])
+    for(j=0;j<8;j++){
+      res[i].push(arreglo[n])
+      n++;
+    }
+  }
   return res;
 }
 
