@@ -3,7 +3,7 @@ const Nodo = require("./Nodo.js")
 
 class Minimax{
     constructor(turno, estadoinicial, maxdeph){
-        this.root = new Nodo(turno, estadoinicial, 0, true)
+        this.root = new Nodo(turno, estadoinicial, 0, false)
         this.maxdeph = maxdeph
     }
     ejecutar(){
