@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     //var movimientosposibles = getMovimientosPosibles(turno, matrix); // elementos [fila, columna, piezascomibles]  
     var response = movimiento[0]+""+movimiento[1]
 
-    console.log(response)
+    console.log("response:", response)
     res.send(response)
   }else{
     res.send('24')
@@ -82,7 +82,7 @@ function minimax(turno, estado, maximizando, profundidad,  maxprof, movimiento){
         }
       }
     }
-    return [mejormov[0], mejormov[1], mejorheuristic]    
+    return [mejormov[1][0], mejormov[1][1], mejorheuristic]    
   }
 }
 
