@@ -149,14 +149,14 @@ class Nodo{
         let X1 = [-1, -1, 0, 1, 1, 1, 0, -1];
         let Y1 = [0, 1, 1, 1, 0, -1, -1, -1];
         let V = [
-        [20, -3, 11, 8, 8, 11, -3, 20],
-        [-3, -7, -4, 1, 1, -4, -7, -3],
-        [11, -4, 2, 2, 2, 2, -4, 11],
-        [8, 1, 2, -3, -3, 2, 1, 8],
-        [8, 1, 2, -3, -3, 2, 1, 8],
-        [11, -4, 2, 2, 2, 2, -4, 11],
-        [-3, -7, -4, 1, 1, -4, -7, -3],
-        [20, -3, 11, 8, 8, 11, -3, 20]
+         [20, -3, 11,  8,  8, 11, -3, 20],
+         [-3, -7, -4,  1,  1, -4, -7, -3],
+         [11, -4,  2,  2,  2,  2, -4, 11],
+         [ 8,  1,  2, -3, -3,  2,  1,  8],
+         [ 8,  1,  2, -3, -3,  2,  1,  8],
+         [11, -4,  2,  2,  2,  2, -4, 11],
+         [-3, -7, -4,  1,  1, -4, -7, -3],
+         [20, -3, 11,  8,  8, 11, -3, 20]
         ]
     
     
@@ -172,85 +172,129 @@ class Nodo{
                 }
                 if(grid[i][j] != '2')   {
                     for(k=0; k<8; k++)  {
-                        x = i + X1[k]; y = j + Y1[k];
+                        x = i + X1[k]; 
+                        y = j + Y1[k];
                         if(x >= 0 && x < 8 && y >= 0 && y < 8 && grid[x][y] == '2') {
-                            if(grid[i][j] == my_color) 
-                             my_front_tiles++;
-                            else opp_front_tiles++;
+                            if(grid[i][j] == my_color){ 
+                                my_front_tiles++;
+                            }
+                            else{
+                             opp_front_tiles++;
+                            }
                             break;
                         }
                     }
                 }
             }
         }
-        if(my_tiles > opp_tiles)
+        
+        if(my_tiles > opp_tiles){
             p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
-        else if(my_tiles < opp_tiles)
+        }else if(my_tiles < opp_tiles){
             p = -(100.0 * opp_tiles)/(my_tiles + opp_tiles);
-        else p = 0;
+        }
+        else {
+            p = 0;
+        }
     
-        if(my_front_tiles > opp_front_tiles)
+        if(my_front_tiles > opp_front_tiles){
             f = -(100.0 * my_front_tiles)/(my_front_tiles + opp_front_tiles);
-        else if(my_front_tiles < opp_front_tiles)
+        } else if(my_front_tiles < opp_front_tiles){
             f = (100.0 * opp_front_tiles)/(my_front_tiles + opp_front_tiles);
-        else f = 0;
+        }
+        else {
+            f = 0;
+        }
     
     // Corner occupancy
-        my_tiles = opp_tiles = 0;
-        if(grid[0][0] == my_color) my_tiles++;
-        else if(grid[0][0] == opp_color) opp_tiles++;
-        if(grid[0][7] == my_color) my_tiles++;
-        else if(grid[0][7] == opp_color) opp_tiles++;
-        if(grid[7][0] == my_color) my_tiles++;
-        else if(grid[7][0] == opp_color) opp_tiles++;
-        if(grid[7][7] == my_color) my_tiles++;
-        else if(grid[7][7] == opp_color) opp_tiles++;
+        my_tiles = 0;
+        opp_tiles = 0;
+        if(grid[0][0] == my_color){ 
+            my_tiles++;
+        } else if(grid[0][0] == opp_color) {
+            opp_tiles++; 
+        }
+        if(grid[0][7] == my_color) { 
+            my_tiles++;
+        }else if(grid[0][7] == opp_color) {
+            opp_tiles++; 
+        }
+        if(grid[7][0] == my_color){ 
+            my_tiles++;
+        }else if(grid[7][0] == opp_color){
+             opp_tiles++;
+        }
+        if(grid[7][7] == my_color) {
+            my_tiles++;
+        }
+        else if(grid[7][7] == opp_color){ 
+            opp_tiles++;
+        }
         c = 25 * (my_tiles - opp_tiles);
     
     // Corner closeness
-        my_tiles = opp_tiles = 0;
+        my_tiles = 0;
+        opp_tiles = 0;
         if(grid[0][0] == '2')   {
-            if(grid[0][1] == my_color) my_tiles++;
-            else if(grid[0][1] == opp_color) opp_tiles++;
-            if(grid[1][1] == my_color) my_tiles++;
-            else if(grid[1][1] == opp_color) opp_tiles++;
-            if(grid[1][0] == my_color) my_tiles++;
-            else if(grid[1][0] == opp_color) opp_tiles++;
+            if(grid[0][1] == my_color) {
+                my_tiles++;
+            }else if(grid[0][1] == opp_color) {
+                opp_tiles++;
+            }
+            if(grid[1][1] == my_color) {
+                my_tiles++;
+            }else if(grid[1][1] == opp_color) {
+                opp_tiles++;
+            }if(grid[1][0] == my_color) {
+                my_tiles++;
+            }else if(grid[1][0] == opp_color) {
+                opp_tiles++;
+            }
         }
         if(grid[0][7] == '2')   {
-            if(grid[0][6] == my_color) my_tiles++;
-            else if(grid[0][6] == opp_color) opp_tiles++;
-            if(grid[1][6] == my_color) my_tiles++;
-            else if(grid[1][6] == opp_color) opp_tiles++;
-            if(grid[1][7] == my_color) my_tiles++;
-            else if(grid[1][7] == opp_color) opp_tiles++;
+            if(grid[0][6] == my_color) {
+                my_tiles++;
+            }else if(grid[0][6] == opp_color){ 
+                opp_tiles++;
+            }
+            if(grid[1][6] == my_color) {
+                my_tiles++;
+            }else if(grid[1][6] == opp_color){
+                opp_tiles++;
+            }
+            if(grid[1][7] == my_color){ 
+                my_tiles++;
+            }else if(grid[1][7] == opp_color){ 
+                opp_tiles++;
+            }
         }
+
         if(grid[7][0] == '2')   {
-            if(grid[7][1] == my_color) my_tiles++;
-            else if(grid[7][1] == opp_color) opp_tiles++;
-            if(grid[6][1] == my_color) my_tiles++;
-            else if(grid[6][1] == opp_color) opp_tiles++;
-            if(grid[6][0] == my_color) my_tiles++;
-            else if(grid[6][0] == opp_color) opp_tiles++;
+            if(grid[7][1] == my_color){ my_tiles++;}
+            else if(grid[7][1] == opp_color){ opp_tiles++;}
+            if(grid[6][1] == my_color){ my_tiles++;}
+            else if(grid[6][1] == opp_color){ opp_tiles++;}
+            if(grid[6][0] == my_color) {my_tiles++;}
+            else if(grid[6][0] == opp_color) {opp_tiles++;}
         }
         if(grid[7][7] == '2')   {
-            if(grid[6][7] == my_color) my_tiles++;
-            else if(grid[6][7] == opp_color) opp_tiles++;
-            if(grid[6][6] == my_color) my_tiles++;
-            else if(grid[6][6] == opp_color) opp_tiles++;
-            if(grid[7][6] == my_color) my_tiles++;
-            else if(grid[7][6] == opp_color) opp_tiles++;
+            if(grid[6][7] == my_color){ my_tiles++;}
+            else if(grid[6][7] == opp_color){ opp_tiles++;}
+            if(grid[6][6] == my_color){ my_tiles++;}
+            else if(grid[6][6] == opp_color){ opp_tiles++;}
+            if(grid[7][6] == my_color){ my_tiles++;}
+            else if(grid[7][6] == opp_color){ opp_tiles++;}
         }
         l = -12.5 * (my_tiles - opp_tiles);
     
     // Mobility
         my_tiles = this.listaMovimientos.length;
         opp_tiles = this.listaMovimientosOpp.length;
-        if(my_tiles > opp_tiles)
+        if(my_tiles > opp_tiles){
             m = (100.0 * my_tiles)/(my_tiles + opp_tiles);
-        else if(my_tiles < opp_tiles)
+        }else if(my_tiles < opp_tiles){
             m = -(100.0 * opp_tiles)/(my_tiles + opp_tiles);
-        else m = 0;
+        }else{ m = 0;}
     
     // final weighted score
         let score = (10 * p) + (801.724 * c) + (382.026 * l) + (78.922 * m) + (74.396 * f) + (10 * d);
