@@ -105,14 +105,14 @@ function minimax2(turno, estado, maximizando, profundidad,  maxprof, movimiento)
     //         fila           columna      HEURISTICA
   }
   var mejorheuristica;
-  var mejormov;
+  var nextTurn = '';
+  var mejorhijo;
+  if(turno === '0'){
+    nextTurn = '1'  
+  } else {
+    nextTurn = '0'  
+  }
   for(hijo of estadoshijos){
-    let nextTurn = '';
-    if(turno === '0'){
-      nextTurn = '1'  
-    } else {
-      nextTurn = '0'  
-    }
     var result = minimax2(nextTurn, hijo[0], !maximizando, profundidad+1, maxprof, hijo[1])
     hijo[2] = result[2];
     if(mejorheuristica == undefined){
