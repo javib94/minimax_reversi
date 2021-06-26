@@ -8,7 +8,7 @@ class Minimax{
     }
     ejecutar(){
         
-        this.root.generarSucesores(2);
+        this.root.generarSucesores(3);
         this.root.generarHeuristicas();
         //console.log("raiz: ", this.root.hijos)
         for(let i in this.root.hijos){
